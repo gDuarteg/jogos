@@ -9,9 +9,11 @@ public class GameManager
 
     public int vidas;
     public int pontos;
+    public float tempo;
 
     public delegate void ChangeStateDelegate();
     public static ChangeStateDelegate changeStateDelegate;
+    // public static ChangeStateDelegate changeStateDelegate2;
 
     private static GameManager _instance;
 
@@ -19,6 +21,7 @@ public class GameManager
     {
         vidas = 3;
         pontos = 0;
+        tempo = 120.0f;
         gameState = GameState.MENU;
     }
 
@@ -34,15 +37,18 @@ public class GameManager
     
     public void changeState(GameState nextState)
     {
+        
         if(nextState == GameState.GAME) Reset();
 
         gameState = nextState;
+        
         changeStateDelegate();
     }
 
     private void Reset() {
         vidas = 3;
-        pontos = 0;    
+        pontos = 0;
+        tempo = 120.0f;   
     }
 
 }
