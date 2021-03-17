@@ -6,6 +6,13 @@ public class EnemyController : SteerableBehaviour, IShooter, IDamageable
 {
 
     public GameObject tiro;
+    GameManager gm;
+
+    int vida = 3;
+
+    private void Start() {
+        gm = GameManager.GetInstance();
+    }
 
     public void Shoot()
     {
@@ -14,15 +21,14 @@ public class EnemyController : SteerableBehaviour, IShooter, IDamageable
 
     public void TakeDamage()
     {
-        Die();
+        vida--;
+        if(vida <= 0) Die();
     }
 
     public void Die()
     {
-        Destroy(gameObject);
+        gm.pontos ++;
+        Destroy(transform.parent.gameObject);
     }
-
-    // float angle = 0;
-
     
 }

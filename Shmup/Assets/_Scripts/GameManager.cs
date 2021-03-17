@@ -11,8 +11,20 @@ public class GameManager
 
     public int vidas;
     public int pontos;
-    
+
+    public delegate void ChangeStateDelegate();
+    public static ChangeStateDelegate changeStateDelegate;
+    public static ChangeStateDelegate pauseChangeStateDelegate;
+
     private static GameManager _instance;
+
+    private GameManager()
+    {
+
+        vidas = 10;
+        pontos = 0;
+        gameState = GameState.MENU;
+    }
 
     public static GameManager GetInstance()
     {
@@ -22,17 +34,35 @@ public class GameManager
         return _instance;
     }
 
-    private GameManager()
+    public void changeState(GameState nextState)
     {
-
-        vidas = 10;
-        pontos = 0;
-        gameState = GameState.GAME;
+        if (gameState != GameState.PAUSE && nextState == GameState.GAME) {
+            Reset();
+            gameState = nextState;
+            changeStateDelegate();
+        }
+        else if (gameState == GameState.PAUSE && nextState == GameState.GAME) {
+            gameState = nextState;
+            pauseChangeStateDelegate();
+        } else {
+            gameState = nextState;
+            changeStateDelegate();
+        }
+           
+        
     }
 
     private void Reset() {
         vidas = 10;
         pontos = 0;
-        // tempo = 120.0f;  
+        // tempo = 120.0f;
+
+        // GameObject[] enemies = GameObject.FindGameObjectsWithTag("tiro" );
+        // foreach(GameObject enemy in enemies)
+        // {
+        //     Destroy(enemy);
+        //     // Do something to each enemy (link up a reference, check for damage, etc.)
+        // }
+        // Destroy(GameObject.FindGameObjectsWithTag("tiro")); 
     }
 }

@@ -4,7 +4,13 @@ using UnityEngine;
 
 public class ShotBehaviour : SteerableBehaviour
 {
-    
+    GameManager gm;
+
+    private void Start() {
+        gm = GameManager.GetInstance();
+        GameManager.changeStateDelegate += ResetBullet;
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if(collision.CompareTag("Player")) return;
@@ -17,8 +23,20 @@ public class ShotBehaviour : SteerableBehaviour
         Destroy(gameObject);
     }
 
+    private void ResetBullet() {
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("tiro" );
+        foreach(GameObject enemy in enemies)
+        {
+            Destroy(enemy);
+        }
+    }
+
     private void Update()
     {
-        Thrust(1, 0);
+        if(gameObject.transform.position.x >= 50){
+            Destroy(gameObject);
+        }
+        Thrust(5, 0);
+        
     }
 }

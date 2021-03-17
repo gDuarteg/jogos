@@ -27,6 +27,9 @@ public class ShotEnemyBehaviour : SteerableBehaviour
         Vector3 posPlayer = GameObject.FindWithTag("Player").transform.position;
         direction = (posPlayer - transform.position).normalized;
         Thrust(direction.x, direction.y);
+        if(Time.time == 1 ){
+            Destroy(gameObject);
+        }
     }
 
     private void OnBecameInvisible() {

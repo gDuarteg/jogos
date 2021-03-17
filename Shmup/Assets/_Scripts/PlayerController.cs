@@ -19,7 +19,6 @@ public class PlayerController : SteerableBehaviour, IShooter, IDamageable
     private void Start() {
         animator = GetComponent<Animator>();
         gm = GameManager.GetInstance();
-
     }
 
     public void Shoot()
@@ -39,15 +38,27 @@ public class PlayerController : SteerableBehaviour, IShooter, IDamageable
 
     public void Die()
     {
-        Destroy(gameObject);
+        // gameObject.active = false;
+        // Destroy(gameObject);
+        if (gm.gameState == GameManager.GameState.GAME)
+        {
+            gm.changeState(GameManager.GameState.ENDGAME);
+        }
     }
 
     void FixedUpdate()
     {
+        if(gm.gameState != GameManager.GameState.GAME) return;   
+        
+        if(Input.GetKeyDown(KeyCode.P) && gm.gameState == GameManager.GameState.GAME)
+        {
+            gm.changeState(GameManager.GameState.PAUSE);
+        }
+        
         float yInput = Input.GetAxis("Vertical");
         float xInput = Input.GetAxis("Horizontal");
         Thrust(xInput, yInput);
-
+    
         if(yInput != 0 || xInput !=0) {
             animator.SetFloat("Velocity", 1.0f);
         } else {
@@ -57,6 +68,7 @@ public class PlayerController : SteerableBehaviour, IShooter, IDamageable
         {
             Shoot();
         }
+        
     }    
 
     private void OnTriggerEnter2D(Collider2D other) {

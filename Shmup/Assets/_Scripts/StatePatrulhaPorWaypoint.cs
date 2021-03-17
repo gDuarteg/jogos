@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class StatePatrulhaPorWaypoint : State
 {
+    GameManager gm;
 
     public Transform[] waypoints;
 
@@ -11,7 +12,7 @@ public class StatePatrulhaPorWaypoint : State
     // float angle = 0;
 
     public override void Awake()
-    {
+    {    
         base.Awake();
 
         Transition ToAtacando = new Transition();
@@ -25,12 +26,17 @@ public class StatePatrulhaPorWaypoint : State
     }
     
     private void Start() {
+        gm = GameManager.GetInstance();
+
         waypoints[0].position = transform.position;
         waypoints[1].position = GameObject.FindWithTag("Player").transform.position;
     }
 
     public void Update() // WARNING
     {
+        
+        if(gm.gameState != GameManager.GameState.GAME) return; 
+
         if(Vector3.Distance(transform.position, waypoints[1].position) > 0.1f) {
             Vector3 direction = waypoints[1].position - transform.position;
             direction.Normalize();
